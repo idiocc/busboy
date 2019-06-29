@@ -1,10 +1,46 @@
-<types namespace="_@goa/busboy">
-  <type name="Config" desc="Options for the program.">
-    <prop boolean name="shouldRun" default="true">
-      A boolean option.
+<types namespace="_goa">
+  <type name="BusBoyConfig" desc="Options for the program.">
+    <prop type="!Object" name="headers">
+      These are the HTTP headers of the incoming request, which are used by individual parsers.
     </prop>
-    <prop string name="text">
-      A text to return.
+    <prop number name="highWaterMark">
+      The `highWaterMark` to use for this Busboy instance (Default: WritableStream default).
+    </prop>
+    <prop number name="fileHwm">
+      The `highWaterMark` to use for file streams (Default: ReadableStream default).
+    </prop>
+    <prop string name="defCharset" default="utf8">
+      The default character set to use when one isn't defined.
+    </prop>
+    <prop boolean name="preservePath" default="false">
+      If paths in the multipart 'filename' field shall be preserved.
+    </prop>
+    <prop opt type="_goa.Limits" name="limits">
+      Various limits on incoming data.
+    </prop>
+  </type>
+
+  <type name="Limits" desc="Various limits on incoming data.">
+    <prop number name="fieldNameSize" default="100">
+      Max field name size in bytes.
+    </prop>
+    <prop number name="fieldSize" default="1024">
+      Max field value size in bytes.
+    </prop>
+    <prop number name="fields" default="Infinity">
+      Max number of non-file fields.
+    </prop>
+    <prop opt number name="fileSize" default="Infinity">
+      For multipart forms, the max file size in bytes.
+    </prop>
+    <prop opt number name="files" default="Infinity">
+      For multipart forms, the max number of file fields.
+    </prop>
+    <prop opt number name="parts" default="Infinity">
+      For multipart forms, the max number of parts (fields + files).
+    </prop>
+    <prop opt number name="headerPairs" default="2000">
+      For multipart forms, the max number of header key=> value pairs to parse.
     </prop>
   </type>
 </types>

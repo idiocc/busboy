@@ -1,31 +1,13 @@
-import { debuglog } from 'util'
+import Multipart from './types/multipart'
+import Urlencoded from './types/urlencoded'
+import BusBoy from './BusBoy'
 
-const LOG = debuglog('@goa/busboy')
-
-/**
- * [fork] A Streaming Parser For HTML Form Data For Node.JS.
- * @param {_@goa/busboy.Config} [config] Options for the program.
- * @param {boolean} [config.shouldRun=true] A boolean option. Default `true`.
- * @param {string} config.text A text to return.
- */
-export default async function busboy(config = {}) {
-  const {
-    shouldRun = true,
-    text,
-  } = config
-  if (!shouldRun) return
-  LOG('@goa/busboy called with %s', text)
-  return text
+export default class extends BusBoy {
+  /**
+   * @param {_goa.BusBoyConfig} opts
+   */
+  constructor(opts) {
+    super(opts)
+    this.TYPES = [Multipart, Urlencoded]
+  }
 }
-
-/* documentary types/index.xml */
-/**
- * @suppress {nonStandardJsDocs}
- * @typedef {_@goa/busboy.Config} Config Options for the program.
- */
-/**
- * @suppress {nonStandardJsDocs}
- * @typedef {Object} _@goa/busboy.Config Options for the program.
- * @prop {boolean} [shouldRun=true] A boolean option. Default `true`.
- * @prop {string} text A text to return.
- */

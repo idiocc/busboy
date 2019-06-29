@@ -14,8 +14,8 @@
     "doc": "NODE_DEBUG=doc doc -o README.md",
     "b": "alamode src -o build -s",
     "d": "yarn-s d1 externs",
-    "d1": "typal types/index.js src -c -t types/index.xml",
-    "externs": "typal externs.js",
+    "d1": "typal types/index.js -c -t types/index.xml",
+    "externs": "typal types/externs.js",
     "build": "yarn-s d b doc",
     "e": "alanode"
   },
@@ -40,6 +40,7 @@
   },
   "homepage": "https://github.com/idiocc/busboy#readme",
   "devDependencies": {
+    "@idio/dicer": "^1.0.0",
     "alamode": "^2.1.2",
     "documentary": "^1.27.2",
     "eslint-config-artdeco": "1.0.1",

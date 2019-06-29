@@ -34,6 +34,11 @@
   resolved "https://registry.yarnpkg.com/@depack/split/-/split-1.0.0.tgz#37fea28d9bc6f01e5a2da87d393f402781bb7e99"
   integrity sha512-PNJPl01VFMKtyN7qBZ2cds4N/lO2KvzLrR7JamODFiuuL2X8mGoTKp1SI8fxlT2MwLV8mScCUKn55QPwsUX7iA==
 
+"@idio/dicer@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@idio/dicer/-/dicer-1.0.0.tgz#48c896269b3223663334e30dfb6ea09f07a16b25"
+  integrity sha512-IEmsdft1vkjFHdVNmJ3Tr5wSAqU12o9QOSoWEhe1WIwLsSbIj6ktalwcuBWU7aNjKuzDUVIBrpoV+K656G192A==
+
 "@typedefs/parser@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@typedefs/parser/-/parser-1.3.0.tgz#f920d85654c72ce9b41c45e9ee762f0161c567da"
