@@ -8,7 +8,7 @@
 
 import { Readable } from 'stream'
 import Dicer from '@idio/dicer'
-import { parseParams, decodeText, basename } from '../utils'
+import { parseParams, decodeText, basename, getLimits } from '../utils'
 import BusBoy from '../BusBoy' // eslint-disable-line
 
 const RE_BOUNDARY = /^boundary$/i
@@ -17,66 +17,46 @@ const RE_CHARSET = /^charset$/i
 const RE_FILENAME = /^filename$/i
 const RE_NAME = /^name$/i
 
-export const detect = /^multipart\/form-data/i
-
 export default class Multipart {
+  static get detect() {
+    return /^multipart\/form-data/i
+  }
   /**
    * @param {BusBoy} boy
-   * @param {_goa.BusBoyConfig} cfg
+   * @param {_goa.BusBoyParserConfig} cfg
    */
   constructor(boy, {
-    limits, defCharset = 'utf8', preservePath, fileHwm,
+    limits = {}, defCharset = 'utf8', preservePath, fileHwm,
     parsedConType = [], highWaterMark,
   }) {
-    var i,
-      len,
-      self = this,
-      boundary,
-      fileopts = (typeof fileHwm === 'number'
-        ? { highWaterMark: fileHwm }
-        : {})
+    let i, len
 
-    for (i = 0, len = parsedConType.length; i < len; ++i) {
-      if (Array.isArray(parsedConType[i])
-          && RE_BOUNDARY.test(parsedConType[i][0])) {
-        boundary = parsedConType[i][1]
-        break
-      }
-    }
+    const [,boundary] = parsedConType.find((t) => {
+      return Array.isArray(t) && RE_BOUNDARY.test(t[0])
+    }) || []
+    if (typeof boundary != 'string')
+      throw new Error('Multipart: Boundary not found')
 
     function checkFinished() {
       if (nends === 0 && finished && !boy._done) {
         finished = false
-        process.nextTick(function() {
+        process.nextTick(() => {
           boy._done = true
           boy.emit('finish')
         })
       }
     }
 
-    if (typeof boundary !== 'string')
-      throw new Error('Multipart: Boundary not found')
+    const {
+      partsLimit, filesLimit, fileSizeLimit, fieldsLimit, fieldSizeLimit,
+    } = getLimits(limits)
 
-    var fieldSizeLimit = (limits && typeof limits.fieldSize === 'number'
-        ? limits.fieldSize
-        : 1 * 1024 * 1024),
-      fileSizeLimit = (limits && typeof limits.fileSize === 'number'
-        ? limits.fileSize
-        : Infinity),
-      filesLimit = (limits && typeof limits.files === 'number'
-        ? limits.files
-        : Infinity),
-      fieldsLimit = (limits && typeof limits.fields === 'number'
-        ? limits.fields
-        : Infinity),
-      partsLimit = (limits && typeof limits.parts === 'number'
-        ? limits.parts
-        : Infinity)
+    /** @type {!stream.Readable|undefined} */
+    let curFile
 
-    var nfiles = 0,
+    let nfiles = 0,
       nfields = 0,
       nends = 0,
-      curFile,
       curField,
       finished = false
 
@@ -88,12 +68,10 @@ export default class Multipart {
 
     const parserCfg = {
       boundary: boundary,
-      maxHeaderPairs: (limits && limits.headerPairs),
+      maxHeaderPairs: limits.headerPairs,
+      highWaterMark,
+      fileHwm,
     }
-    if (fileopts.highWaterMark)
-      parserCfg.partHwm = fileopts.highWaterMark
-    if (highWaterMark)
-      parserCfg.highWaterMark = highWaterMark
 
     this.parser = new Dicer(parserCfg)
     this.parser.on('drain', () => {
@@ -103,10 +81,18 @@ export default class Multipart {
         this._cb = undefined
         cb()
       }
-    }).on('part', function onPart(part) {
-      if (++self._nparts > partsLimit) {
-        self.parser.removeListener('part', onPart)
-        self.parser.on('part', skipPart)
+    }).on('error', (err) => {
+      boy.emit('error', err)
+    }).on('finish', () => {
+      finished = true
+      checkFinished()
+    })
+
+    /** @param {stream.Readable} part */
+    const onPart = (part) => {
+      if (++this._nparts > partsLimit) {
+        this.parser.removeListener('part', onPart)
+        this.parser.on('part', skipPart)
         boy.hitPartsLimit = true
         boy.emit('partsLimit')
         return skipPart(part)
@@ -116,22 +102,22 @@ export default class Multipart {
       // us emit 'end' early since we know the part has ended if we are already
       // seeing the next part
       if (curField) {
-        var field = curField
+        const field = curField
         field.emit('end')
         field.removeAllListeners('end')
       }
 
-      part.on('header', (header) => {
-        var contype,
-          fieldname,
-          parsed,
-          charset,
-          encoding,
+      part.on('header', (/** @type {!Object<string, !Array<string>>} */ header) => {
+        let contype = 'text/plain'
+        let charset = defCharset
+        let encoding = '7bit'
+
+        let fieldname,
           filename,
           nsize = 0
 
         if (header['content-type']) {
-          parsed = parseParams(header['content-type'][0])
+          const parsed = parseParams(header['content-type'][0])
           if (parsed[0]) {
             contype = parsed[0].toLowerCase()
             for (i = 0, len = parsed.length; i < len; ++i) {
@@ -143,13 +129,8 @@ export default class Multipart {
           }
         }
 
-        if (contype === undefined)
-          contype = 'text/plain'
-        if (charset === undefined)
-          charset = defCharset
-
         if (header['content-disposition']) {
-          parsed = parseParams(header['content-disposition'][0])
+          const parsed = parseParams(header['content-disposition'][0])
           if (!RE_FIELD.test(parsed[0]))
             return skipPart(part)
           for (i = 0, len = parsed.length; i < len; ++i) {
@@ -166,12 +147,10 @@ export default class Multipart {
 
         if (header['content-transfer-encoding'])
           encoding = header['content-transfer-encoding'][0].toLowerCase()
-        else
-          encoding = '7bit'
 
-        var onData,
+        let onData,
           onEnd
-        if (contype === 'application/octet-stream' || filename !== undefined) {
+        if (contype == 'application/octet-stream' || filename !== undefined) {
           // file/binary field
           if (nfiles === filesLimit) {
             if (!boy.hitFilesLimit) {
@@ -184,36 +163,36 @@ export default class Multipart {
           ++nfiles
 
           if (!boy._events.file) {
-            self.parser._ignore()
+            this.parser._ignore()
             return
           }
 
           ++nends
-          var file = new FileStream(fileopts)
+          const file = new FileStream({ highWaterMark: fileHwm })
           curFile = file
-          file.on('end', function() {
+          file.on('end', () => {
             --nends
-            self._pause = false
+            this._pause = false
             checkFinished()
-            if (self._cb && !self._needDrain) {
-              var cb = self._cb
-              self._cb = undefined
+            if (this._cb && !this._needDrain) {
+              const cb = this._cb
+              this._cb = undefined
               cb()
             }
           })
-          file._read = function() {
-            if (!self._pause)
+          file._read = () => {
+            if (!this._pause)
               return
-            self._pause = false
-            if (self._cb && !self._needDrain) {
-              var cb = self._cb
-              self._cb = undefined
+            this._pause = false
+            if (this._cb && !this._needDrain) {
+              const cb = this._cb
+              this._cb = undefined
               cb()
             }
           }
           boy.emit('file', fieldname, file, filename, encoding, contype)
 
-          onData = function(data) {
+          onData = (data) => {
             if ((nsize += data.length) > fileSizeLimit) {
               var extralen = (fileSizeLimit - (nsize - data.length))
               if (extralen > 0)
@@ -222,10 +201,10 @@ export default class Multipart {
               file.truncated = true
               part.removeAllListeners('data')
             } else if (!file.push(data))
-              self._pause = true
+              this._pause = true
           }
 
-          onEnd = function() {
+          onEnd = () => {
             curFile = undefined
             file.push(null)
           }
@@ -245,7 +224,7 @@ export default class Multipart {
             truncated = false
           curField = part
 
-          onData = function(data) {
+          onData = (data) => {
             if ((nsize += data.length) > fieldSizeLimit) {
               var extralen = (fieldSizeLimit - (nsize - data.length))
               buffer += data.toString('binary', 0, extralen)
@@ -255,7 +234,7 @@ export default class Multipart {
               buffer += data.toString('binary')
           }
 
-          onEnd = function() {
+          onEnd = () => {
             curField = undefined
             if (buffer.length)
               buffer = decodeText(buffer, 'binary', charset)
@@ -274,23 +253,19 @@ export default class Multipart {
 
         part.on('data', onData)
         part.on('end', onEnd)
-      }).on('error', function(err) {
+      }).on('error', (err) => {
         if (curFile)
           curFile.emit('error', err)
       })
-    }).on('error', function(err) {
-      boy.emit('error', err)
-    }).on('finish', function() {
-      finished = true
-      checkFinished()
-    })
+    }
+
+    this.parser.on('part', onPart)
   }
   end() {
-    var self = this
-    if (this._nparts === 0 && !self._boy._done) {
-      process.nextTick(function() {
-        self._boy._done = true
-        self._boy.emit('finish')
+    if (this._nparts === 0 && !this._boy._done) {
+      process.nextTick(() => {
+        this._boy._done = true
+        this._boy.emit('finish')
       })
     } else if (this.parser.writable)
       this.parser.end()
@@ -306,6 +281,9 @@ export default class Multipart {
   }
 }
 
+/**
+ * @param {stream.Readable} part
+ */
 function skipPart(part) {
   part.resume()
 }
@@ -320,5 +298,17 @@ class FileStream extends Readable {
 
 /**
  * @suppress {nonStandardJsDocs}
- * @typedef {import('../../types').BusBoyConfig} _goa.BusBoyConfig
+ * @typedef {import('../../types').BusBoyParserConfig} _goa.BusBoyParserConfig
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('../../types').BusBoyLimits} _goa.BusBoyLimits
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('stream').Readable} stream.Readable
+ */
+/**
+ * @suppress {nonStandardJsDocs}
+ * @typedef {import('http').IncomingHttpHeaders} http.IncomingHttpHeaders
  */

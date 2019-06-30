@@ -1,12 +1,12 @@
 <types namespace="_goa">
-  <type name="BusBoyConfig" desc="Options for the program.">
-    <prop type="!Object" name="headers">
+  <type record name="BusBoyConfig" desc="Options for the program.">
+    <prop opt type="!Object" name="headers">
       These are the HTTP headers of the incoming request, which are used by individual parsers.
     </prop>
-    <prop number name="highWaterMark">
+    <prop opt number name="highWaterMark">
       The `highWaterMark` to use for this Busboy instance (Default: WritableStream default).
     </prop>
-    <prop number name="fileHwm">
+    <prop opt number name="fileHwm">
       The `highWaterMark` to use for file streams (Default: ReadableStream default).
     </prop>
     <prop string name="defCharset" default="utf8">
@@ -15,12 +15,12 @@
     <prop boolean name="preservePath" default="false">
       If paths in the multipart 'filename' field shall be preserved.
     </prop>
-    <prop opt type="_goa.Limits" name="limits">
+    <prop opt type="_goa.BusBoyLimits" name="limits">
       Various limits on incoming data.
     </prop>
   </type>
 
-  <type name="Limits" desc="Various limits on incoming data.">
+  <type record name="BusBoyLimits" desc="Various limits on incoming data.">
     <prop number name="fieldNameSize" default="100">
       Max field name size in bytes.
     </prop>

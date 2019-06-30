@@ -8,6 +8,8 @@ export default class extends BusBoy {
    */
   constructor(opts) {
     super(opts)
-    this.TYPES = [Multipart, Urlencoded]
+  }
+  get TYPES() {
+    return [Multipart, Urlencoded]
   }
 }

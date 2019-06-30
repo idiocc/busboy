@@ -3,16 +3,19 @@ import { parseParams } from './utils'
 
 export default class Busboy extends Writable {
   /**
-   * @param {_goa.BusBoyConfig} opts
+   * @param {_goa.BusBoyConfig} [opts]
    */
-  constructor(opts) {
-    super({
+  constructor(opts = {}) {
+    super(/** @type {!stream.WritableOptions} */ ({
       ...(opts.highWaterMark ? { highWaterMark: opts.highWaterMark } : {}),
-    })
+    }))
 
     this._done = false
     this._parser = undefined
     this._finished = false
+    this.hitFieldsLimit = false
+    this.hitFilesLimit = false
+    this.hitPartsLimit = false
 
     this.opts = opts
     if (opts.headers && typeof opts.headers['content-type'] == 'string')
@@ -20,28 +23,42 @@ export default class Busboy extends Writable {
     else
       throw new Error('Missing Content-Type')
   }
-  emit(ev) {
+  /**
+   * @param {string|symbol} ev
+   * @param {...?} args
+   */
+  emit(ev, ...args) {
     if (ev == 'finish') {
       if (!this._done) {
         this._parser && this._parser.end()
-        return
+        return false
       } else if (this._finished) {
-        return
+        return false
       }
       this._finished = true
     }
+    super.emit(ev, ...args)
+    return false
+  }
+  /**
+   * This is overridden by index.js file to avoid circular dependencies.
+   */
+  get TYPES() {
+    return []
   }
   parseHeaders(headers) {
     this._parser = undefined
     if (headers['content-type']) {
       const parsed = parseParams(headers['content-type'])
-      let matched, type
+      let matched
+      /** @type {_goa.BusBoyParser} */
+      let Type
       for (let i = 0; i < this.TYPES.length; ++i) {
-        type = this.TYPES[i]
-        if (typeof type.detect == 'function')
-          matched = type.detect(parsed)
+        Type = this.TYPES[i]
+        if (typeof Type.detect == 'function')
+          matched = Type.detect(parsed)
         else
-          matched = type.detect.test(parsed[0])
+          matched = Type.detect.test(parsed[0])
         if (matched)
           break
       }
@@ -50,18 +67,12 @@ export default class Busboy extends Writable {
           limits: this.opts.limits,
           headers: headers,
           parsedConType: parsed,
-          highWaterMark: undefined,
-          fileHwm: undefined,
-          defCharset: undefined,
-          preservePath: false,
+          highWaterMark: this.opts.highWaterMark,
+          fileHwm: this.opts.fileHwm,
+          defCharset: this.opts.defCharset,
+          preservePath: this.opts.preservePath,
         }
-        if (this.opts.highWaterMark)
-          cfg.highWaterMark = this.opts.highWaterMark
-        if (this.opts.fileHwm)
-          cfg.fileHwm = this.opts.fileHwm
-        cfg.defCharset = this.opts.defCharset
-        cfg.preservePath = this.opts.preservePath
-        this._parser = type(this, cfg)
+        this._parser = new Type(this, cfg)
         return
       }
     }

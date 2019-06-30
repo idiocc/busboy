@@ -1,37 +1,33 @@
-import { Decoder, decodeText } from '../utils'
+import { Decoder, decodeText, getLimits } from '../utils'
+import BusBoy from '../BusBoy' // eslint-disable-line
 
 const RE_CHARSET = /^charset$/i
 
-export const detect = /^application\/x-www-form-urlencoded/i
-
 export default class UrlEncoded {
+  static get detect() {
+    return /^application\/x-www-form-urlencoded/i
+  }
   /**
    * @param {BusBoy} boy
-   * @param {_goa.BusBoyConfig} cfg
+   * @param {_goa.BusBoyParserConfig} cfg
    */
-  constructor(boy, { limits, parsedConType, defCharset = 'utf8' }) {
+  constructor(boy, { limits = {}, parsedConType, defCharset = 'utf8' }) {
     this.boy = boy
+    this._hitLimit = undefined
 
-    this.fieldSizeLimit = (limits && typeof limits.fieldSize == 'number'
-      ? limits.fieldSize
-      : 1 * 1024 * 1024)
-    this.fieldNameSizeLimit = (limits && typeof limits.fieldNameSize == 'number'
-      ? limits.fieldNameSize
-      : 100)
-    this.fieldsLimit = (limits && typeof limits.fields == 'number'
-      ? limits.fields
-      : Infinity)
+    const { fieldSizeLimit, fieldNameSizeLimit, fieldsLimit } = getLimits(limits)
+    this.fieldSizeLimit = fieldSizeLimit
+    this.fieldNameSizeLimit = fieldNameSizeLimit
+    this.fieldsLimit = fieldsLimit
 
-    var charset
-    for (var i = 0, len = parsedConType.length; i < len; ++i) {
+    let charset = defCharset
+    for (let i = 0, len = parsedConType.length; i < len; ++i) {
       if (Array.isArray(parsedConType[i])
           && RE_CHARSET.test(parsedConType[i][0])) {
         charset = parsedConType[i][1].toLowerCase()
         break
       }
     }
-
-    if (charset === undefined) charset = defCharset
 
     this.decoder = new Decoder()
     this.charset = charset
@@ -210,5 +206,5 @@ export default class UrlEncoded {
 
 /**
  * @suppress {nonStandardJsDocs}
- * @typedef {import('../../types').BusBoyConfig} _goa.BusBoyConfig
+ * @typedef {import('../../types').BusBoyParserConfig} _goa.BusBoyParserConfig
  */

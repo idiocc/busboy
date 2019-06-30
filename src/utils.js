@@ -6,8 +6,12 @@ function encodedReplacer(match, byte) {
   return String.fromCharCode(parseInt(byte, 16))
 }
 
+/**
+ * Parses the content-type header.
+ * @param {string} str
+ */
 export function parseParams(str) {
-  var res = [],
+  let res = [],
     state = 'key',
     charset = '',
     inquote = false,
@@ -23,7 +27,7 @@ export function parseParams(str) {
         escaping = true
         continue
       }
-    } else if (str[i] === '"') {
+    } else if (str[i] == '"') {
       if (!escaping) {
         if (inquote) {
           inquote = false
@@ -45,17 +49,17 @@ export function parseParams(str) {
           state = 'value'
         tmp = ''
         continue
-      } else if (state === 'key'
-                 && (str[i] === '*' || str[i] === '=')
+      } else if (state == 'key'
+                 && (str[i] == '*' || str[i] == '=')
                  && res.length) {
-        if (str[i] === '*')
+        if (str[i] == '*')
           state = 'charset'
         else
           state = 'value'
         res[p] = [tmp, undefined]
         tmp = ''
         continue
-      } else if (!inquote && str[i] === ';') {
+      } else if (!inquote && str[i] == ';') {
         state = 'key'
         if (charset) {
           if (tmp.length) {
@@ -92,18 +96,22 @@ export function parseParams(str) {
   return res
 }
 
-
+/**
+ * @param {string} text
+ * @param {string} textEncoding
+ * @param {string} destEncoding
+ */
 export function decodeText(text, textEncoding, destEncoding) {
   var ret
   if (text && getEncoding(destEncoding)) {
     try {
-      ret = TextDecoder(destEncoding)
+      ret = new TextDecoder(destEncoding)
         .decode(Buffer.from(text, textEncoding))
     } catch(e) {
       /* ok */
     }
   }
-  return (typeof ret === 'string' ? ret : text)
+  return (typeof ret == 'string' ? ret : text)
 }
 
 const HEX = [
@@ -140,7 +148,7 @@ export class Decoder {
             this.buffer = undefined
           }
         }
-      } else if (str[i] === '%') {
+      } else if (str[i] == '%') {
         if (i > p) {
           res += str.substring(p, i)
           p = i
@@ -166,8 +174,27 @@ export function basename(path) {
     case 0x2F: // '/'
     case 0x5C: // '\'
       path = path.slice(i + 1)
-      return (path === '..' || path === '.' ? '' : path)
+      return (path == '..' || path == '.' ? '' : path)
     }
   }
   return (path == '..' || path == '.' ? '' : path)
+}
+
+
+/**
+ * @param {_goa.BusBoyLimits} limits
+ */
+export const getLimits = (limits) => {
+  const {
+    fieldSize: fieldSizeLimit = 1 * 1024 * 1024,
+    fieldNameSize: fieldNameSizeLimit = 100,
+    fileSize: fileSizeLimit = Infinity,
+    files: filesLimit = Infinity,
+    fields: fieldsLimit = Infinity,
+    parts: partsLimit = Infinity,
+  } = limits
+  return {
+    fieldSizeLimit, fileSizeLimit, filesLimit, fieldsLimit, partsLimit,
+    fieldNameSizeLimit,
+  }
 }
