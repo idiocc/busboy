@@ -4,8 +4,10 @@
 
 ## Copyright
 
-(c) [Idio][1] 2019
+Original Work by [Brian White aka mscdex](https://github.com/mscdex/busboy).
 
-[1]: https://idio.cc
+---
+
+<idio-footer />
 
 %~ -1%
