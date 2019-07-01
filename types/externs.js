@@ -101,6 +101,17 @@ stream.Readable.prototype._readableState
 stream.Readable.prototype._readableState.sync
 
 /**
+ * @interface
+ * @param {?} opts
+ */
+_goa.BusBoyFileStream = function(opts) {}
+
+/**
+ * @type {boolean}
+ */
+_goa.BusBoyFileStream.prototype.truncated
+
+/**
  * @constructor
  * @param {*} busBoy
  * @param {!_goa.BusBoyParserConfig} parserConfig

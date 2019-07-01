@@ -288,6 +288,9 @@ function skipPart(part) {
   part.resume()
 }
 
+/**
+ * @implements {_goa.BusBoyFileStream}
+ */
 class FileStream extends Readable {
   constructor(opts) {
     super(opts)

@@ -261,7 +261,7 @@ asdasdasdasd
 'Unexpected end of multipart data'
 /**/
 
-## !content-type for fields
+## content-type for fields
 ------WebKitFormBoundaryTB2MiQ36fnSJlrhY
 Content-Disposition: form-data; name="cont"
 Content-Type: application/json
@@ -277,7 +277,7 @@ Content-Type: application/json
 [ ['field', 'cont', '{}', false, false, '7bit', 'application/json'] ]
 /**/
 
-## !empty form
+## empty form
 ------WebKitFormBoundaryTB2MiQ36fnSJlrhY--
 
 
