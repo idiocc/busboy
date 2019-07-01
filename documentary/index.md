@@ -2,7 +2,7 @@
 
 %NPM: @goa/busboy%
 
-`@goa/busboy` is a[fork](https://github.com/mscdex/busboy) of A Streaming Parser For HTML Form Data For Node.JS written in ES6 and optimised with [JavaScript Compiler](https://compiler.page).
+`@goa/busboy` is a fork of [A Streaming Parser For HTML Form Data For Node.JS](https://github.com/mscdex/busboy) Written In ES6 And Optimised With [JavaScript Compiler](https://compiler.page).
 
 ```sh
 yarn add @goa/busboy

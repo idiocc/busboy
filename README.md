@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/%40goa%2Fbusboy.svg)](https://npmjs.org/package/@goa/busboy)
 
-`@goa/busboy` is a[fork](https://github.com/mscdex/busboy) of A Streaming Parser For HTML Form Data For Node.JS written in ES6 and optimised with [JavaScript Compiler](https://compiler.page).
+`@goa/busboy` is a fork of [A Streaming Parser For HTML Form Data For Node.JS](https://github.com/mscdex/busboy) Written In ES6 And Optimised With [JavaScript Compiler](https://compiler.page).
 
 ```sh
 yarn add @goa/busboy
@@ -12,9 +12,12 @@ yarn add @goa/busboy
 
 - [Table Of Contents](#table-of-contents)
 - [API](#api)
-- [class Busboy](#class-busboy)
+- [`class Busboy`](#class-busboy)
   * [File Event](#file-event)
   * [Field Event](#field-event)
+- [`constructor(config: BusBoyConfig): Busboy`](#constructorconfig-busboyconfig-busboy)
+  * [`_goa.BusBoyConfig`](#type-_goabusboyconfig)
+  * [`_goa.BusBoyLimits`](#type-_goabusboylimits)
 - [Copyright](#copyright)
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/0.svg?sanitize=true"></a></p>
@@ -29,16 +32,17 @@ import Busboy from '@goa/busboy'
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/1.svg?sanitize=true"></a></p>
 
-## class Busboy
+## `class Busboy`
 
 Busboy is a _Writable_ stream. Emits the following events:
 
-|  **file**   | Emitted for each new file form field found. `transferEncoding` contains the 'Content-Transfer-Encoding' value for the file stream. `mimeType` contains the 'Content-Type' value for the file stream. |
-| ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **field**   | Emitted for each new non-file field found.                                                                                                                                                           |
-| partsLimit  | Emitted when specified `parts` limit has been reached. No more 'file' or 'field' events will be emitted.                                                              |
-| filesLimit  | Emitted when specified `files` limit has been reached. No more 'file' events will be emitted.                                                                         |
-| fieldsLimit | Emitted when specified `fields` limit has been reached. No more 'field' events will be emitted.                                                                        |
+|         Event         |                                                                                             Description                                                                                              |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [file](#file-event)   | Emitted for each new file form field found. `transferEncoding` contains the 'Content-Transfer-Encoding' value for the file stream. `mimeType` contains the 'Content-Type' value for the file stream. |
+| [field](#field-event) | Emitted for each new non-file field found.                                                                                                                                                           |
+| partsLimit            | Emitted when specified `parts` limit has been reached. No more 'file' or 'field' events will be emitted.                                                              |
+| filesLimit            | Emitted when specified `files` limit has been reached. No more 'file' events will be emitted.                                                                         |
+| fieldsLimit           | Emitted when specified `fields` limit has been reached. No more 'field' events will be emitted.                                                                        |
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/2.svg?sanitize=true" width="25"></a></p>
 
@@ -74,13 +78,30 @@ busboy.on('field',
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
 
-```constructor => Busboy
-[
-  ["config", "BusBoyConfig"]
-]
-```
+## `constructor(`<br/>&nbsp;&nbsp;`config: BusBoyConfig,`<br/>`): Busboy`
 
-%TYPEDEF types/index.xml%
+__<a name="type-_goabusboyconfig">`_goa.BusBoyConfig`</a>__: Options for the program.
+
+|     Name      |                                                   Type                                                   |                                        Description                                        | Default |
+| ------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
+| headers       | <em>!Object</em>                                                                                         | These are the HTTP headers of the incoming request, which are used by individual parsers. | -       |
+| highWaterMark | <em>number</em>                                                                                          | The `highWaterMark` to use for this Busboy instance (Default: WritableStream default).    | -       |
+| fileHwm       | <em>number</em>                                                                                          | The `highWaterMark` to use for file streams (Default: ReadableStream default).            | -       |
+| defCharset    | <em>string</em>                                                                                          | The default character set to use when one isn't defined.                                  | `utf8`  |
+| preservePath  | <em>boolean</em>                                                                                         | If paths in the multipart 'filename' field shall be preserved.                            | `false` |
+| limits        | <em><a href="#type-_goabusboylimits" title="Various limits on incoming data.">_goa.BusBoyLimits</a></em> | Various limits on incoming data.                                                          | -       |
+
+__<a name="type-_goabusboylimits">`_goa.BusBoyLimits`</a>__: Various limits on incoming data.
+
+|     Name      |      Type       |                                 Description                                  |  Default   |
+| ------------- | --------------- | ---------------------------------------------------------------------------- | ---------- |
+| fieldNameSize | <em>number</em> | Max field name size in bytes.                                                | `100`      |
+| fieldSize     | <em>number</em> | Max field value size in bytes.                                               | `1024`     |
+| fields        | <em>number</em> | Max number of non-file fields.                                               | `Infinity` |
+| fileSize      | <em>number</em> | For multipart forms, the max file size in bytes.                             | `Infinity` |
+| files         | <em>number</em> | For multipart forms, the max number of file fields.                          | `Infinity` |
+| parts         | <em>number</em> | For multipart forms, the max number of parts (fields + files).               | `Infinity` |
+| headerPairs   | <em>number</em> | For multipart forms, the max number of header key=&gt; value pairs to parse. | `2000`     |
 
 ```js
 /* alanode example/ */

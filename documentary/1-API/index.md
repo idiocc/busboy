@@ -8,14 +8,15 @@ import Busboy from '@goa/busboy'
 
 %~%
 
-## class Busboy
+## `class Busboy`
 
 Busboy is a _Writable_ stream. Emits the following events:
 
 ```table
 [
-  ["**file**", "Emitted for each new file form field found. `transferEncoding` contains the 'Content-Transfer-Encoding' value for the file stream. `mimeType` contains the 'Content-Type' value for the file stream."],
-  ["**field**", "Emitted for each new non-file field found."],
+  ["Event", "Description"],
+  ["[file](#file-event)", "Emitted for each new file form field found. `transferEncoding` contains the 'Content-Transfer-Encoding' value for the file stream. `mimeType` contains the 'Content-Type' value for the file stream."],
+  ["[field](#field-event)", "Emitted for each new non-file field found."],
   ["partsLimit", "Emitted when specified `parts` limit has been reached. No more 'file' or 'field' events will be emitted."],
   ["filesLimit", "Emitted when specified `files` limit has been reached. No more 'file' events will be emitted."],
   ["fieldsLimit", "Emitted when specified `fields` limit has been reached. No more 'field' events will be emitted."]
@@ -56,7 +57,7 @@ busboy.on('field',
 
 %~ width="25"%
 
-```constructor => Busboy
+```## constructor => Busboy
 [
   ["config", "BusBoyConfig"]
 ]
