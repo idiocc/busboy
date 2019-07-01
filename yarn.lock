@@ -34,10 +34,10 @@
   resolved "https://registry.yarnpkg.com/@depack/split/-/split-1.0.0.tgz#37fea28d9bc6f01e5a2da87d393f402781bb7e99"
   integrity sha512-PNJPl01VFMKtyN7qBZ2cds4N/lO2KvzLrR7JamODFiuuL2X8mGoTKp1SI8fxlT2MwLV8mScCUKn55QPwsUX7iA==
 
-"@idio/dicer@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@idio/dicer/-/dicer-1.0.0.tgz#48c896269b3223663334e30dfb6ea09f07a16b25"
-  integrity sha512-IEmsdft1vkjFHdVNmJ3Tr5wSAqU12o9QOSoWEhe1WIwLsSbIj6ktalwcuBWU7aNjKuzDUVIBrpoV+K656G192A==
+"@idio/dicer@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@idio/dicer/-/dicer-1.0.2.tgz#335e0ed34a421285799ca97de0fe81209f36f2db"
+  integrity sha512-/9fjfYQBdhV7ZA/rS4+8B8QS1k+78wyB9gW/5KclslDnduaFpAV8Qd0BcBYEpzr+fsCd0dOJq11zw6o6J+Ssmg==
 
 "@typedefs/parser@^1.3.0":
   version "1.3.0"
