@@ -103,19 +103,80 @@ __<a name="type-_goabusboylimits">`_goa.BusBoyLimits`</a>__: Various limits on i
 | parts         | <em>number</em> | For multipart forms, the max number of parts (fields + files).               | `Infinity` |
 | headerPairs   | <em>number</em> | For multipart forms, the max number of header key=&gt; value pairs to parse. | `2000`     |
 
-```js
-/* alanode example/ */
-import busboy from '@goa/busboy'
+The constructor can throw errors:
+
+- Unsupported content type: $type - The Content-Type isn't one Busboy can parse.
+- Missing Content-Type - The provided headers don't include Content-Type at all.
+
+```jsx
+import idio from '@idio/idio'
+import render from '@depack/render'
+import Busboy from '@goa/busboy'
 
 (async () => {
-  const res = await busboy({
-    text: 'example',
+  const { app, url } = await idio({
+    async post(ctx, next) {
+      if (ctx.request.method != 'POST') {
+        return await next()
+      }
+      const busboy = new Busboy({ headers: ctx.request.headers })
+
+      busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        console.log(
+          'File [%s]: filename: %s, encoding: %s, mimetype: %s',
+          fieldname, filename, encoding, mimetype)
+        file.on('data', (data) => {
+          console.log('File [%s] got %s bytes', fieldname, data.length)
+        })
+        file.on('end', () => {
+          console.log('File [%s] Finished', fieldname)
+        })
+      })
+
+      busboy.on('field', (
+        fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype,
+      ) => {
+        console.log('Field [%s]: value: %O', fieldname, val)
+      })
+
+      ctx.req.pipe(busboy)
+
+      await new Promise((r, j) => {
+        busboy.on('finish', () => {
+          console.log('Done parsing form!')
+          r()
+        }).on('error', j)
+      })
+      ctx.status = 303
+      ctx.body = 'OK'
+      exitExample(app)
+    },
+    get(ctx) {
+      ctx.body = render(<html>
+        <body>
+          <form method="POST" encType="multipart/form-data">
+            <input type="text" name="textfield" /><br />
+            <input type="file" name="filefield" /><br />
+            <input type="submit" />
+          </form>
+        </body>
+      </html>)
+    },
   })
-  console.log(res)
+  console.log(url)
 })()
 ```
 ```
-
+http://localhost:5000
+Field [textfield]: value: 'test'
+File [filefield]: filename: nodejs.png, encoding: 7bit, mimetype: image/png
+File [filefield] got 64660 bytes
+File [filefield] got 65536 bytes
+File [filefield] got 65536 bytes
+File [filefield] got 65536 bytes
+File [filefield] got 26760 bytes
+File [filefield] Finished
+Done parsing form!
 ```
 
 <p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/5.svg?sanitize=true"></a></p>

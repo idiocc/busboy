@@ -65,6 +65,11 @@ busboy.on('field',
 
 %TYPEDEF types/index.xml%
 
+The constructor can throw errors:
+
+- Unsupported content type: $type - The Content-Type isn't one Busboy can parse.
+- Missing Content-Type - The provided headers don't include Content-Type at all.
+
 %EXAMPLE: example, ../src => @goa/busboy%
 %FORK example%
 

@@ -41,7 +41,9 @@
   },
   "homepage": "https://github.com/idiocc/busboy#readme",
   "devDependencies": {
+    "@depack/render": "^1.2.0",
     "@idio/dicer": "^1.0.2",
+    "@idio/idio": "^0.1.0",
     "alamode": "^2.3.4",
     "documentary": "^1.27.4",
     "eslint-config-artdeco": "1.0.1",
