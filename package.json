@@ -2,7 +2,7 @@
   "name": "@goa/busboy",
   "version": "1.0.0",
   "description": "[fork] A Streaming Parser For HTML Form Data For Node.JS.",
-  "main": "build/index.js",
+  "main": "depack/index.js",
   "module": "src/index.js",
   "scripts": {
     "t": "zoroaster -a",
@@ -21,7 +21,7 @@
     "e": "alanode"
   },
   "files": [
-    "build",
+    "depack",
     "src",
     "types/externs.js"
   ],
