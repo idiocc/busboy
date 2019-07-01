@@ -1,6 +1,6 @@
 {
   "name": "@goa/busboy",
-  "version": "0.0.0-pre",
+  "version": "1.0.0",
   "description": "[fork] A Streaming Parser For HTML Form Data For Node.JS.",
   "main": "build/index.js",
   "module": "src/index.js",
