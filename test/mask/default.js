@@ -44,3 +44,31 @@ export const multipart = makeTestSuite('test/result/multipart', {
   },
   jsProps: ['expected', 'limits', 'events'],
 })
+
+export const urlencoded = makeTestSuite('test/result/urlencoded', {
+  async getResults() {
+    const busboy = new BusBoy({
+      limits: this.limits,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded; charset=utf-8',
+      },
+    })
+    const results = []
+
+    busboy.on('field', function(key, val, keyTrunc, valTrunc) {
+      results.push([key, val, keyTrunc, valTrunc])
+    })
+    busboy.on('file', () => {
+      throw new Error('Unexpected filed')
+    })
+
+    busboy.end(this.input.replace(/\n/g, '\r\n'))
+
+    return await new Promise((r) => {
+      busboy.on('finish', () => {
+        r(results)
+      }).on('error', ({ message }) => r(message))
+    })
+  },
+  jsonProps: ['limits', 'expected'],
+})
