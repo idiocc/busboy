@@ -1,3 +1,9 @@
+## 2 July 2019
+
+### [1.1.0](https://github.com/idiocc/busboy/compare/v1.0.1...v1.1.0)
+
+- [deps] Install and use `text-decoding`.
+
 ## 1 July 2019
 
 ### [1.0.1](https://github.com/idiocc/busboy/compare/v1.0.0...v1.0.1)
