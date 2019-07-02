@@ -32,6 +32,12 @@
   },
   "keywords": [
     "busboy",
+    "http",
+    "multipart",
+    "form-data",
+    "form",
+    "file",
+    "upload",
     "goa"
   ],
   "author": "Anton <anton@adc.sh>",
