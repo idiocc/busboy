@@ -1,4 +1,4 @@
-import { TextDecoder, getEncoding } from './encoding'
+const { TextDecoder } = require(/* depack */'text-decoding')
 
 const RE_ENCODED = /%([a-fA-F0-9]{2})/g
 
@@ -102,8 +102,8 @@ export function parseParams(str) {
  * @param {string} destEncoding
  */
 export function decodeText(text, textEncoding, destEncoding) {
-  var ret
-  if (text && getEncoding(destEncoding)) {
+  let ret
+  if (text) {
     try {
       ret = new TextDecoder(destEncoding)
         .decode(Buffer.from(text, textEncoding))
