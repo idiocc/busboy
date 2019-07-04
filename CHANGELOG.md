@@ -1,3 +1,9 @@
+## 4 July 2019
+
+### [1.1.1](https://github.com/idiocc/busboy/compare/v1.1.0...v1.1.1)
+
+- [fix] Return the result of the `emit` function.
+
 ## 2 July 2019
 
 ### [1.1.0](https://github.com/idiocc/busboy/compare/v1.0.1...v1.1.0)
