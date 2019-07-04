@@ -408,8 +408,7 @@ class ra extends v {
       }
       this.h = !0;
     }
-    super.emit(a, ...c);
-    return !1;
+    return super.emit(a, ...c);
   }
   get g() {
     return [];
