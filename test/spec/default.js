@@ -1,4 +1,4 @@
-import { equal, deepEqual } from '@zoroaster/assert'
+import { ok, equal, deepEqual } from '@zoroaster/assert'
 import Context from '../context'
 import BusBoy from '../../src'
 
@@ -46,6 +46,21 @@ const T = {
       ['field', 'foo', 'foo value', false, false, '7bit', 'text/plain'],
       ['field', 'bar', 'bar value', false, false, '7bit', 'text/plain'],
     ])
+  },
+  async 'emit returns true/false'({ BOUNDARY }) {
+    const busboy = new BusBoy({
+      headers: {
+        'content-type': 'multipart/form-data; boundary=' + BOUNDARY,
+      },
+    })
+    const p = new Promise((r) => {
+      busboy.on('error', () => {
+        r()
+      })
+    })
+    const res = busboy.emit('error')
+    ok(res)
+    await p
   },
 }
 

@@ -37,8 +37,7 @@ export default class Busboy extends Writable {
       }
       this._finished = true
     }
-    super.emit(ev, ...args)
-    return false
+    return super.emit(ev, ...args)
   }
   /**
    * This is overridden by index.js file to avoid circular dependencies.
