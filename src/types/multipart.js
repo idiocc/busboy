@@ -8,7 +8,7 @@
 
 import { Readable } from 'stream'
 import Dicer from '@idio/dicer'
-import { parseParams, decodeText, basename, getLimits } from '../utils'
+import { parseParams, decodeBuffer, basename, getLimits, decodeText } from '../utils'
 import BusBoy from '../BusBoy' // eslint-disable-line
 
 const RE_BOUNDARY = /^boundary$/i
@@ -135,9 +135,9 @@ export default class Multipart {
             return skipPart(part)
           for (i = 0, len = parsed.length; i < len; ++i) {
             if (RE_NAME.test(parsed[i][0])) {
-              fieldname = decodeText(parsed[i][1], 'binary', 'utf8')
+              fieldname = parsed[i][1]
             } else if (RE_FILENAME.test(parsed[i][0])) {
-              filename = decodeText(parsed[i][1], 'binary', 'utf8')
+              filename = parsed[i][1]
               if (!preservePath)
                 filename = basename(filename)
             }
@@ -152,7 +152,7 @@ export default class Multipart {
           onEnd
         if (contype == 'application/octet-stream' || filename !== undefined) {
           // file/binary field
-          if (nfiles === filesLimit) {
+          if (nfiles == filesLimit) {
             if (!boy.hitFilesLimit) {
               boy.hitFilesLimit = true
               boy.emit('filesLimit')
@@ -190,11 +190,11 @@ export default class Multipart {
               cb()
             }
           }
-          boy.emit('file', fieldname, file, filename, encoding, contype)
+          boy.emit('file', fieldname, file, filename, encoding, contype, part)
 
           onData = (data) => {
             if ((nsize += data.length) > fileSizeLimit) {
-              var extralen = (fileSizeLimit - (nsize - data.length))
+              const extralen = (fileSizeLimit - (nsize - data.length))
               if (extralen > 0)
                 file.push(data.slice(0, extralen))
               file.emit('limit')
@@ -210,7 +210,7 @@ export default class Multipart {
           }
         } else {
           // non-file field
-          if (nfields === fieldsLimit) {
+          if (nfields == fieldsLimit) {
             if (!boy.hitFieldsLimit) {
               boy.hitFieldsLimit = true
               boy.emit('fieldsLimit')
@@ -220,35 +220,33 @@ export default class Multipart {
 
           ++nfields
           ++nends
-          var buffer = '',
-            truncated = false
+          const buffer = []
+          let truncated = false
           curField = part
 
+          /** @param {Buffer} data */
           onData = (data) => {
-            if ((nsize += data.length) > fieldSizeLimit) {
-              var extralen = (fieldSizeLimit - (nsize - data.length))
-              buffer += data.toString('binary', 0, extralen)
+            let d = data
+            nsize += data.length
+            if (nsize > fieldSizeLimit) {
+              d = Buffer.from(data, 0, fieldSizeLimit).slice(0, fieldSizeLimit)
               truncated = true
               part.removeAllListeners('data')
-            } else
-              buffer += data.toString('binary')
+            }
+            buffer.push(d)
           }
 
           onEnd = () => {
             curField = undefined
-            if (buffer.length)
-              buffer = decodeText(buffer, 'binary', charset)
-            boy.emit('field', fieldname, buffer, false, truncated, encoding, contype)
+            const b = Buffer.concat(buffer)
+            const bu = decodeBuffer(b, charset)
+            boy.emit('field', fieldname, bu, false, truncated, encoding, contype)
             --nends
             checkFinished()
           }
         }
 
-        /* As of node@2efe4ab761666 (v0.10.29+/v0.11.14+), busboy had become
-           broken. Streams2/streams3 is a huge black box of confusion, but
-           somehow overriding the sync state seems to fix things again (and still
-           seems to work for previous node versions).
-        */
+        // https://github.com/nodejs/node/blob/df339bccf24839da473937bd523602cf68b114af/lib/_stream_readable.js#L111
         part._readableState.sync = false
 
         part.on('data', onData)
@@ -271,7 +269,7 @@ export default class Multipart {
       this.parser.end()
   }
   write(chunk, cb) {
-    var r
+    let r
     if ((r = this.parser.write(chunk)) && !this._pause)
       cb()
     else {

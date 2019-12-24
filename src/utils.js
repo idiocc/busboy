@@ -113,6 +113,21 @@ export function decodeText(text, textEncoding, destEncoding) {
   }
   return (typeof ret == 'string' ? ret : text)
 }
+/**
+ * @param {Buffer} text
+ * @param {string} textEncoding
+ * @param {string} destEncoding
+ */
+export function decodeBuffer(buffer, textEncoding, destEncoding) {
+  try {
+    buffer = new TextDecoder(destEncoding)
+      .decode(buffer)
+  } catch(e) {
+    /* ok */
+  }
+  return buffer
+  // return (typeof ret == 'string' ? ret : text)
+}
 
 const HEX = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
