@@ -22,6 +22,7 @@
   "files": [
     "compile",
     "src",
+    "typedefs.json",
     "types/externs.js",
     "types/index.xml"
   ],

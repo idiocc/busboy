@@ -1,5 +1,9 @@
 ## 24 December 2019
 
+### [1.2.3](https://github.com/idiocc/busboy/compare/v1.2.2...v1.2.3)
+
+- [fix] Add _BusBoy_ `typedefs.json`.
+
 ### [1.2.2](https://github.com/idiocc/busboy/compare/v1.2.1...v1.2.2)
 
 - [fix] Fix `utf8` filenames.
