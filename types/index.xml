@@ -1,5 +1,5 @@
 <types namespace="_goa">
-  <type record name="BusBoyConfig" desc="Options for the program.">
+  <record name="BusBoyConfig" desc="Options for the program.">
     <prop opt type="!Object" name="headers">
       These are the HTTP headers of the incoming request, which are used by individual parsers.
     </prop>
@@ -18,9 +18,9 @@
     <prop opt type="_goa.BusBoyLimits" name="limits">
       Various limits on incoming data.
     </prop>
-  </type>
+  </record>
 
-  <type record name="BusBoyLimits" desc="Various limits on incoming data.">
+  <record name="BusBoyLimits" desc="Various limits on incoming data.">
     <prop number name="fieldNameSize" default="100">
       Max field name size in bytes.
     </prop>
@@ -42,5 +42,5 @@
     <prop opt number name="headerPairs" default="2000">
       For multipart forms, the max number of header key=> value pairs to parse.
     </prop>
-  </type>
+  </record>
 </types>

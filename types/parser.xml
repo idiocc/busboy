@@ -1,7 +1,7 @@
 <types namespace="_goa">
-  <type record extends="_goa.BusBoyConfig" name="BusBoyParserConfig" desc="The config for the parser.">
+  <record extends="_goa.BusBoyConfig" name="BusBoyParserConfig" desc="The config for the parser.">
     <prop type="!Array<string|!Array<String>>" name="parsedConType">
       Parsed content type.
     </prop>
-  </type>
+  </record>
 </types>

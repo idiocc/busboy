@@ -1,3 +1,4 @@
+import '../types/externs'
 import BusBoy from './'
 
-DEPACK_EXPORT = BusBoy
+module.exports = BusBoy

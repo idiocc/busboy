@@ -114,9 +114,9 @@ export function decodeText(text, textEncoding, destEncoding) {
   return (typeof ret == 'string' ? ret : text)
 }
 /**
- * @param {Buffer} text
+ * @param {!Buffer} buffer
  * @param {string} textEncoding
- * @param {string} destEncoding
+ * @param {string} [destEncoding]
  */
 export function decodeBuffer(buffer, textEncoding, destEncoding) {
   try {

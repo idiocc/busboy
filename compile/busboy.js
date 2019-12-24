@@ -1,9 +1,9 @@
+#!/usr/bin/env node
 'use strict';
-let DEPACK_EXPORT;
 const stream = require('stream');
-const events = require('events');'use strict';
-const {Readable:r, Writable:v} = stream;
-const {EventEmitter:C} = events;
+const events = require('events');             
+const u = stream.Readable, w = stream.Writable;
+const C = events.EventEmitter;
 /*
  MIT streamsearch by Brian White
  https://github.com/mscdex/streamsearch
@@ -16,19 +16,19 @@ function D(a, c, d, e, f) {
   }
   return !0;
 }
-function aa(a, c) {
+function J(a, c) {
   var d = c.length, e = a.h, f = e.length, b = -a.a, g = e[f - 1], h = a.g, k = a.f;
   if (0 > b) {
     for (; 0 > b && b <= d - f;) {
-      var m = b + f - 1;
-      m = 0 > m ? a.f[a.a + m] : c[m];
-      if (m === g && H(a, c, b, f - 1)) {
+      var n = b + f - 1;
+      n = 0 > n ? a.f[a.a + n] : c[n];
+      if (n === g && K(a, c, b, f - 1)) {
         return a.a = 0, ++a.c, b > -a.a ? a.emit("info", !0, k, 0, a.a + b) : a.emit("info", !0), a.b = b + f;
       }
-      b += h[m];
+      b += h[n];
     }
     if (0 > b) {
-      for (; 0 > b && !H(a, c, b, d - b);) {
+      for (; 0 > b && !K(a, c, b, d - b);) {
         b++;
       }
     }
@@ -39,11 +39,11 @@ function aa(a, c) {
     }
   }
   for (0 <= b && (b += a.b); b <= d - f;) {
-    m = c[b + f - 1];
-    if (m === g && c[b] === e[0] && D(e, 0, c, b, f - 1)) {
+    n = c[b + f - 1];
+    if (n === g && c[b] === e[0] && D(e, 0, c, b, f - 1)) {
       return ++a.c, 0 < b ? a.emit("info", !0, c, a.b, b) : a.emit("info", !0), a.b = b + f;
     }
-    b += h[m];
+    b += h[n];
   }
   if (b < d) {
     for (; b < d && (c[b] !== e[0] || !D(c, b, e, 0, d - b));) {
@@ -54,7 +54,7 @@ function aa(a, c) {
   0 < b && a.emit("info", !1, c, a.b, b < d ? b : d);
   return a.b = d;
 }
-function H(a, c, d, e) {
+function K(a, c, d, e) {
   for (var f = 0; f < e;) {
     var b = d + f;
     if ((0 > b ? a.f[a.a + b] : c[b]) === a.h[f]) {
@@ -65,7 +65,7 @@ function H(a, c, d, e) {
   }
   return !0;
 }
-class I extends C {
+class L extends C {
   constructor(a) {
     super();
     "string" === typeof a && (a = new Buffer(a));
@@ -90,20 +90,20 @@ class I extends C {
     Buffer.isBuffer(a) || (a = new Buffer(a, "binary"));
     var d = a.length;
     for (this.b = c; e !== d && this.c < this.i;) {
-      var e = aa(this, a);
+      var e = J(this, a);
     }
     return e;
   }
 }
-;class J extends r {
+;class M extends u {
   constructor(a) {
     super(a);
   }
   _read() {
   }
 }
-;const ba = Buffer.from("\r\n\r\n"), ca = /\r\n/g, da = /^([^:]+):[ \t]?([\x00-\xFF]+)?$/;
-function ea(a) {
+;const aa = Buffer.from("\r\n\r\n"), ba = /\r\n/g, ca = /^([^:]+):[ \t]?([\x00-\xFF]+)?$/;
+function da(a) {
   a.g = !1;
   a.b = "";
   a.a = {};
@@ -112,7 +112,7 @@ function ea(a) {
   a.c = 0;
   a.b = 0;
 }
-class fa extends C {
+class ea extends C {
   constructor(a = {}) {
     super();
     ({maxHeaderPairs:a = 2000} = a);
@@ -123,12 +123,12 @@ class fa extends C {
     this.b = "";
     this.a = {};
     this.g = !1;
-    this.f = new I(ba);
+    this.f = new L(aa);
     this.f.on("info", (c, d, e, f) => {
       d && !this.h && (81920 < this.c + (f - e) ? (f = 81920 - this.c, this.c = 81920) : this.c += f - e, 81920 === this.c && (this.h = !0), this.b += d.toString("binary", e, f));
       if (c) {
         if (this.b && this.i !== this.maxHeaderPairs) {
-          c = this.b.split(ca);
+          c = this.b.split(ba);
           d = c.length;
           f = !1;
           for (let g = 0; g < d; ++g) {
@@ -136,7 +136,7 @@ class fa extends C {
               if ("\t" == c[g][0] || " " == c[g][0]) {
                 this.a[b][this.a[b].length - 1] += c[g];
               } else {
-                if (e = da.exec(c[g])) {
+                if (e = ca.exec(c[g])) {
                   var b = e[1].toLowerCase();
                   e[2] ? void 0 === this.a[b] ? this.a[b] = [e[2]] : this.a[b].push(e[2]) : this.a[b] = [""];
                   if (++this.i === this.maxHeaderPairs) {
@@ -174,47 +174,47 @@ class fa extends C {
  MIT dicer by Brian White
  https://github.com/mscdex/dicer
 */
-const ha = Buffer.from("-"), ia = Buffer.from("\r\n"), ja = () => {
+const fa = Buffer.from("-"), ha = Buffer.from("\r\n"), ia = () => {
 };
-function ka(a) {
+function ja(a) {
   a.a = void 0;
   a.h = void 0;
   a.g = void 0;
 }
-function K(a, c, d, e, f) {
+function N(a, c, d, e, f) {
   var b, g = 0, h = !0;
   if (!a.a && a.o && d) {
     for (; 2 > a.f && e + g < f;) {
       if (45 === d[e + g]) {
         ++g, ++a.f;
       } else {
-        a.f && (b = ha);
+        a.f && (b = fa);
         a.f = 0;
         break;
       }
     }
-    2 === a.f && (e + g < f && a._events.trailer && a.emit("trailer", d.slice(e + g, f)), ka(a), a.s = !0, 0 === a.u && (a.b = !0, a.emit("finish"), a.b = !1));
+    2 === a.f && (e + g < f && a._events.trailer && a.emit("trailer", d.slice(e + g, f)), ja(a), a.s = !0, 0 === a.u && (a.b = !0, a.emit("finish"), a.b = !1));
     if (a.f) {
       return;
     }
   }
   a.o && (a.o = !1);
-  a.a || (a.a = new J(a.C), a.a._read = () => {
-    L(a);
+  a.a || (a.a = new M(a.C), a.a._read = () => {
+    O(a);
   }, g = a.c ? "preamble" : "part", a._events[g] ? a.emit(g, a.a) : a._ignore(), a.c || (a.i = !0));
-  d && e < f && !a.j && (a.c || !a.i ? (b && (h = a.a.push(b)), h = a.a.push(d.slice(e, f)), h || (a.m = !0)) : !a.c && a.i && (b && a.g.push(b), b = a.g.push(d.slice(e, f)), !a.i && void 0 !== b && b < f && K(a, !1, d, e + b, f)));
-  c && (ea(a.g), a.c ? a.c = !1 : (++a.u, a.a.on("end", () => {
-    0 === --a.u && (a.s ? (a.b = !0, a.emit("finish"), a.b = !1) : L(a));
+  d && e < f && !a.j && (a.c || !a.i ? (b && (h = a.a.push(b)), h = a.a.push(d.slice(e, f)), h || (a.m = !0)) : !a.c && a.i && (b && a.g.push(b), b = a.g.push(d.slice(e, f)), !a.i && void 0 !== b && b < f && N(a, !1, d, e + b, f)));
+  c && (da(a.g), a.c ? a.c = !1 : (++a.u, a.a.on("end", () => {
+    0 === --a.u && (a.s ? (a.b = !0, a.emit("finish"), a.b = !1) : O(a));
   })), a.a.push(null), a.a = void 0, a.j = !1, a.o = !0, a.f = 0);
 }
-function L(a) {
+function O(a) {
   if (a.m && (a.m = !1, a.l)) {
     const c = a.l;
     a.l = void 0;
     c();
   }
 }
-class la extends v {
+class ka extends w {
   constructor(a) {
     super(a);
     if (!a || !a.headerFirst && "string" != typeof a.boundary) {
@@ -231,14 +231,14 @@ class la extends v {
     this.j = !1;
     this.C = "number" == typeof a.partHwm ? {highWaterMark:a.partHwm} : {};
     this.m = !1;
-    this.g = new fa(a);
+    this.g = new ea(a);
     this.g.on("header", c => {
       this.i = !1;
       this.a.emit("header", c);
     });
   }
   emit(a) {
-    "finish" != a || this.b ? v.prototype.emit.apply(this, arguments) : this.s || process.nextTick(() => {
+    "finish" != a || this.b ? w.prototype.emit.apply(this, arguments) : this.s || process.nextTick(() => {
       this.emit("error", Error("Unexpected end of multipart data"));
       this.a && !this.j ? (this.a.emit("error", Error((this.c ? "Preamble" : "Part") + " terminated early due to unexpected end of multipart data")), this.a.push(null), process.nextTick(() => {
         this.b = !0;
@@ -253,33 +253,33 @@ class la extends v {
       return d();
     }
     if (this.D && this.c) {
-      if (this.a || (this.a = new J(this.C), this._events.preamble ? this.emit("preamble", this.a) : this._ignore()), c = this.g.push(a), !this.i && void 0 !== c && c < a.length) {
+      if (this.a || (this.a = new M(this.C), this._events.preamble ? this.emit("preamble", this.a) : this._ignore()), c = this.g.push(a), !this.i && void 0 !== c && c < a.length) {
         a = a.slice(c);
       } else {
         return d();
       }
     }
-    this.B && (this.h.push(ia), this.B = !1);
+    this.B && (this.h.push(ha), this.B = !1);
     this.h.push(a);
     this.m ? this.l = d : d();
   }
   setBoundary(a) {
-    this.h = new I("\r\n--" + a);
+    this.h = new L("\r\n--" + a);
     this.h.on("info", (c, d, e, f) => {
-      K(this, c, d, e, f);
+      N(this, c, d, e, f);
     });
   }
   _ignore() {
-    this.a && !this.j && (this.j = !0, this.a.on("error", ja), this.a.resume());
+    this.a && !this.j && (this.j = !0, this.a.on("error", ia), this.a.resume());
   }
 }
-;const {TextDecoder:ma} = require("text-decoding"), M = /%([a-fA-F0-9]{2})/g;
-function N(a, c) {
+;const {TextDecoder:P} = require("text-decoding"), Q = /%([a-fA-F0-9]{2})/g;
+function R(a, c) {
   return String.fromCharCode(parseInt(c, 16));
 }
-function O(a) {
+function S(a) {
   let c = [], d = "key", e = "", f = !1, b = !1, g = 0, h = "";
-  for (var k = 0, m = a.length; k < m; ++k) {
+  for (var k = 0, n = a.length; k < n; ++k) {
     if ("\\" === a[k] && f) {
       if (b) {
         b = !1;
@@ -309,7 +309,7 @@ function O(a) {
           } else {
             if (!f && ";" == a[k]) {
               d = "key";
-              e && (h.length && (h = P(h.replace(M, N), e)), e = "");
+              e && (h.length && (h = T(h.replace(Q, R), e)), e = "");
               void 0 === c[g] ? c[g] = h : c[g][1] = h;
               h = "";
               ++g;
@@ -325,35 +325,35 @@ function O(a) {
     }
     h += a[k];
   }
-  e && h.length && (h = P(h.replace(M, N), e));
+  e && h.length && (h = T(h.replace(Q, R), e));
   void 0 === c[g] ? h && (c[g] = h) : c[g][1] = h;
   return c;
 }
-function P(a, c) {
+function T(a, c) {
   let d;
   if (a) {
     try {
-      d = (new ma(c)).decode(Buffer.from(a, "binary"));
+      d = (new P(c)).decode(Buffer.from(a, "binary"));
     } catch (e) {
     }
   }
   return "string" == typeof d ? d : a;
 }
-const na = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], oa = /\+/g;
-class pa {
+const la = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], ma = /\+/g;
+class na {
   constructor() {
     this.a = void 0;
   }
   write(a) {
-    a = a.replace(oa, " ");
+    a = a.replace(ma, " ");
     for (var c = "", d = 0, e = 0, f = a.length; d < f; ++d) {
-      void 0 !== this.a ? na[a.charCodeAt(d)] ? (this.a += a[d], ++e, 2 === this.a.length && (c += String.fromCharCode(parseInt(this.a, 16)), this.a = void 0)) : (c += "%" + this.a, this.a = void 0, --d) : "%" == a[d] && (d > e && (c += a.substring(e, d), e = d), this.a = "", ++e);
+      void 0 !== this.a ? la[a.charCodeAt(d)] ? (this.a += a[d], ++e, 2 === this.a.length && (c += String.fromCharCode(parseInt(this.a, 16)), this.a = void 0)) : (c += "%" + this.a, this.a = void 0, --d) : "%" == a[d] && (d > e && (c += a.substring(e, d), e = d), this.a = "", ++e);
     }
     e < f && void 0 === this.a && (c += a.substring(e));
     return c;
   }
 }
-function qa(a) {
+function oa(a) {
   if ("string" != typeof a) {
     return "";
   }
@@ -366,14 +366,13 @@ function qa(a) {
   }
   return ".." == a || "." == a ? "" : a;
 }
-const Q = a => {
+const U = a => {
   const {fieldSize:c = 1048576, fieldNameSize:d = 100, fileSize:e = Infinity, files:f = Infinity, fields:b = Infinity, parts:g = Infinity} = a;
   return {v:c, F:e, G:f, w:b, H:g, A:d};
 };
-class ra extends v {
-  constructor(a) {
-    a = void 0 === a ? {} : a;
-    super(Object.assign({}, a.highWaterMark ? {highWaterMark:a.highWaterMark} : {}));
+class pa extends w {
+  constructor(a = {}) {
+    super({...a.highWaterMark ? {highWaterMark:a.highWaterMark} : {}});
     this.a = !1;
     this.b = void 0;
     this.j = this.i = this.f = this.h = !1;
@@ -383,7 +382,7 @@ class ra extends v {
         a = a.headers;
         this.b = void 0;
         if (a["content-type"]) {
-          const c = O(a["content-type"]);
+          const c = S(a["content-type"]);
           let d, e;
           for (let f = 0; f < this.g.length && (e = this.g[f], "function" == typeof e.detect ? d = e.detect(c) : d = e.detect.test(c[0]), !d); ++f) {
           }
@@ -420,30 +419,30 @@ class ra extends v {
     this.b.write(a, d);
   }
 }
-;const sa = /^boundary$/i, ta = /^form-data$/i, ua = /^charset$/i, va = /^filename$/i, wa = /^name$/i;
-class xa {
+;const qa = /^boundary$/i, ra = /^form-data$/i, sa = /^charset$/i, ta = /^filename$/i, ua = /^name$/i;
+class va {
   static get detect() {
     return /^multipart\/form-data/i;
   }
-  constructor(a, {limits:c = {}, defCharset:d = "utf8", preservePath:e, fileHwm:f, parsedConType:b = [], highWaterMark:g}) {
-    function h() {
+  constructor(a, {limits:c = {}, preservePath:d, fileHwm:e, parsedConType:f = [], highWaterMark:b}) {
+    function g() {
       0 === x && E && !a.a && (E = !1, process.nextTick(() => {
         a.a = !0;
         a.emit("finish");
       }));
     }
-    let k, m;
-    [, b] = b.find(l => Array.isArray(l) && sa.test(l[0])) || [];
-    if ("string" != typeof b) {
+    let h, k;
+    [, f] = f.find(l => Array.isArray(l) && qa.test(l[0])) || [];
+    if ("string" != typeof f) {
       throw Error("Multipart: Boundary not found");
     }
-    const {H:ya, G:za, F:S, w:Aa, v:T} = Q(c);
-    let y, U = 0, V = 0, x = 0, z, E = !1;
+    const {H:n, G:wa, F:V, w:xa, v:F} = U(c);
+    let y, W = 0, X = 0, x = 0, z, E = !1;
     this.c = this.f = !1;
     this.a = void 0;
     this.h = 0;
     this.g = a;
-    this.b = new la({boundary:b, maxHeaderPairs:c.headerPairs, highWaterMark:g, fileHwm:f});
+    this.b = new ka({boundary:f, maxHeaderPairs:c.headerPairs, highWaterMark:b, fileHwm:e});
     this.b.on("drain", () => {
       this.f = !1;
       if (this.a && !this.c) {
@@ -455,123 +454,127 @@ class xa {
       a.emit("error", l);
     }).on("finish", () => {
       E = !0;
-      h();
+      g();
     });
-    const W = l => {
-      if (++this.h > ya) {
-        return this.b.removeListener("part", W), this.b.on("part", R), a.j = !0, a.emit("partsLimit"), R(l);
+    const Y = l => {
+      if (++this.h > n) {
+        return this.b.removeListener("part", Y), this.b.on("part", Z), a.j = !0, a.emit("partsLimit"), Z(l);
       }
       if (z) {
-        const n = z;
-        n.emit("end");
-        n.removeAllListeners("end");
+        const m = z;
+        m.emit("end");
+        m.removeAllListeners("end");
       }
-      l.on("header", n => {
-        let A = "text/plain", X = d, F = "7bit", G;
+      l.on("header", m => {
+        let A = "text/plain", G = "7bit", H;
         let B = 0;
-        if (n["content-type"]) {
-          var q = O(n["content-type"][0]);
+        if (m["content-type"]) {
+          var q = S(m["content-type"][0]);
           if (q[0]) {
-            for (A = q[0].toLowerCase(), k = 0, m = q.length; k < m; ++k) {
-              if (ua.test(q[k][0])) {
-                X = q[k][1].toLowerCase();
-                break;
-              }
+            for (A = q[0].toLowerCase(), h = 0, k = q.length; h < k && !sa.test(q[h][0]); ++h) {
             }
           }
         }
-        if (n["content-disposition"]) {
-          q = O(n["content-disposition"][0]);
-          if (!ta.test(q[0])) {
-            return R(l);
+        if (m["content-disposition"]) {
+          q = S(m["content-disposition"][0]);
+          if (!ra.test(q[0])) {
+            return Z(l);
           }
-          k = 0;
-          for (m = q.length; k < m; ++k) {
-            if (wa.test(q[k][0])) {
-              G = P(q[k][1], "utf8");
+          h = 0;
+          for (k = q.length; h < k; ++h) {
+            if (ua.test(q[h][0])) {
+              H = q[h][1];
             } else {
-              if (va.test(q[k][0])) {
-                var u = P(q[k][1], "utf8");
-                e || (u = qa(u));
+              if (ta.test(q[h][0])) {
+                var v = q[h][1];
+                d || (v = oa(v));
               }
             }
           }
         } else {
-          return R(l);
+          return Z(l);
         }
-        n["content-transfer-encoding"] && (F = n["content-transfer-encoding"][0].toLowerCase());
-        if ("application/octet-stream" == A || void 0 !== u) {
-          if (U === za) {
-            return a.i || (a.i = !0, a.emit("filesLimit")), R(l);
+        m["content-transfer-encoding"] && (G = m["content-transfer-encoding"][0].toLowerCase());
+        if ("application/octet-stream" == A || void 0 !== v) {
+          if (W == wa) {
+            return a.i || (a.i = !0, a.emit("filesLimit")), Z(l);
           }
-          ++U;
+          ++W;
           if (!a._events.file) {
             this.b._ignore();
             return;
           }
           ++x;
-          const p = new Ba({highWaterMark:f});
+          const p = new ya({highWaterMark:e});
           y = p;
           p.on("end", () => {
             --x;
             this.c = !1;
-            h();
+            g();
             if (this.a && !this.f) {
-              const t = this.a;
+              const r = this.a;
               this.a = void 0;
-              t();
+              r();
             }
           });
           p._read = () => {
             if (this.c && (this.c = !1, this.a && !this.f)) {
-              const t = this.a;
+              const r = this.a;
               this.a = void 0;
-              t();
+              r();
             }
           };
-          a.emit("file", G, p, u, F, A);
-          n = t => {
-            if ((B += t.length) > S) {
-              var Y = S - (B - t.length);
-              0 < Y && p.push(t.slice(0, Y));
+          a.emit("file", H, p, v, G, A, l);
+          m = r => {
+            if ((B += r.length) > V) {
+              const t = V - (B - r.length);
+              0 < t && p.push(r.slice(0, t));
               p.emit("limit");
               p.truncated = !0;
               l.removeAllListeners("data");
             } else {
-              p.push(t) || (this.c = !0);
+              p.push(r) || (this.c = !0);
             }
           };
-          u = () => {
+          v = () => {
             y = void 0;
             p.push(null);
           };
         } else {
-          if (V === Aa) {
-            return a.f || (a.f = !0, a.emit("fieldsLimit")), R(l);
+          if (X == xa) {
+            return a.f || (a.f = !0, a.emit("fieldsLimit")), Z(l);
           }
-          ++V;
+          ++X;
           ++x;
-          var w = "", Z = !1;
+          const p = [];
+          let r = !1;
           z = l;
-          n = p => {
-            (B += p.length) > T ? (w += p.toString("binary", 0, T - (B - p.length)), Z = !0, l.removeAllListeners("data")) : w += p.toString("binary");
+          m = t => {
+            let I = t;
+            B += t.length;
+            B > F && (I = Buffer.from(t, 0, F).slice(0, F), r = !0, l.removeAllListeners("data"));
+            p.push(I);
           };
-          u = () => {
+          v = () => {
             z = void 0;
-            w.length && (w = P(w, X));
-            a.emit("field", G, w, !1, Z, F, A);
+            var t = Buffer.concat(p);
+            try {
+              t = (new P(void 0)).decode(t);
+            } catch (I) {
+            }
+            a.emit("field", H, t, !1, r, G, A);
             --x;
-            h();
+            g();
           };
         }
         l._readableState.sync = !1;
-        l.on("data", n);
-        l.on("end", u);
-      }).on("error", n => {
-        y && y.emit("error", n);
+        l.on("data", m);
+        l.on("end", v);
+      }).on("error", m => {
+        y && y.emit("error", m);
       });
     };
-    this.b.on("part", W);
+    this.b.on("part", Y);
   }
   end() {
     0 !== this.h || this.g.a ? this.b.writable && this.b.end() : process.nextTick(() => {
@@ -583,10 +586,10 @@ class xa {
     (a = this.b.write(a)) && !this.c ? c() : (this.f = !a, this.a = c);
   }
 }
-function R(a) {
+function Z(a) {
   a.resume();
 }
-class Ba extends r {
+class ya extends u {
   constructor(a) {
     super(a);
     this.truncated = !1;
@@ -594,26 +597,26 @@ class Ba extends r {
   _read() {
   }
 }
-;const Ca = /^charset$/i;
-class Da {
+;const za = /^charset$/i;
+class Aa {
   static get detect() {
     return /^application\/x-www-form-urlencoded/i;
   }
   constructor(a, {limits:c = {}, parsedConType:d, defCharset:e = "utf8"}) {
     this.f = a;
     this.h = void 0;
-    const {v:f, A:b, w:g} = Q(c);
+    const {v:f, A:b, w:g} = U(c);
     this.v = f;
     this.A = b;
     this.w = g;
     a = e;
     for (let h = 0, k = d.length; h < k; ++h) {
-      if (Array.isArray(d[h]) && Ca.test(d[h][0])) {
+      if (Array.isArray(d[h]) && za.test(d[h][0])) {
         a = d[h][1].toLowerCase();
         break;
       }
     }
-    this.g = new pa;
+    this.g = new na;
     this.j = a;
     this.m = 0;
     this.o = "key";
@@ -651,7 +654,7 @@ class Da {
           d > b && (this.a += this.g.write(a.toString("binary", b, d))), this.o = "val", this.h = !1, this.b = !0, this.c = "", this.s = 0, this.u = !1, this.g.a = void 0, b = d + 1;
         } else {
           if (void 0 !== e) {
-            if (++this.m, d = this.i, b = e > b ? this.a += this.g.write(a.toString("binary", b, e)) : this.a, this.h = !1, this.b = !0, this.a = "", this.l = 0, this.i = !1, this.g.a = void 0, b.length && this.f.emit("field", P(b, this.j), "", d, !1), b = e + 1, this.m === this.w) {
+            if (++this.m, d = this.i, b = e > b ? this.a += this.g.write(a.toString("binary", b, e)) : this.a, this.h = !1, this.b = !0, this.a = "", this.l = 0, this.i = !1, this.g.a = void 0, b.length && this.f.emit("field", T(b, this.j), "", d, !1), b = e + 1, this.m === this.w) {
               return c();
             }
           } else {
@@ -674,7 +677,7 @@ class Da {
           }
         }
         if (void 0 !== e) {
-          if (++this.m, e > b && (this.c += this.g.write(a.toString("binary", b, e))), this.f.emit("field", P(this.a, this.j), P(this.c, this.j), this.i, this.u), this.o = "key", this.h = !1, this.b = !0, this.a = "", this.l = 0, this.i = !1, this.g.a = void 0, b = e + 1, this.m === this.w) {
+          if (++this.m, e > b && (this.c += this.g.write(a.toString("binary", b, e))), this.f.emit("field", T(this.a, this.j), T(this.c, this.j), this.i, this.u), this.o = "key", this.h = !1, this.b = !0, this.a = "", this.l = 0, this.i = !1, this.g.a = void 0, b = e + 1, this.m === this.w) {
             return c();
           }
         } else {
@@ -691,18 +694,18 @@ class Da {
     c();
   }
   end() {
-    this.f.a || ("key" == this.o && 0 < this.a.length ? this.f.emit("field", P(this.a, this.j), "", this.i, !1) : "val" == this.o && this.f.emit("field", P(this.a, this.j), P(this.c, this.j), this.i, this.u), this.f.a = !0, this.f.emit("finish"));
+    this.f.a || ("key" == this.o && 0 < this.a.length ? this.f.emit("field", T(this.a, this.j), "", this.i, !1) : "val" == this.o && this.f.emit("field", T(this.a, this.j), T(this.c, this.j), this.i, this.u), this.f.a = !0, this.f.emit("finish"));
   }
 }
-;class Ea extends ra {
+;class Ba extends pa {
   constructor(a) {
     super(a);
   }
   get g() {
-    return [xa, Da];
+    return [va, Aa];
   }
 }
-;DEPACK_EXPORT = Ea;
+;module.exports = Ba;
 
 
-module.exports = DEPACK_EXPORT
+//# sourceMappingURL=busboy.js.map

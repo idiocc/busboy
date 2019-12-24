@@ -1,3 +1,8 @@
+/**
+ * @fileoverview
+ * @externs
+ */
+
 /* typal types/parser.xml externs */
 /** @const */
 var _goa = {}
@@ -40,7 +45,7 @@ _goa.BusBoyConfig.prototype.fileHwm
  */
 _goa.BusBoyConfig.prototype.defCharset
 /**
- * If paths in the multipart 'filename' field shall be preserved.
+ * If paths in the multipart 'filename' field shall be preserved. Default `false`.
  * @type {boolean|undefined}
  */
 _goa.BusBoyConfig.prototype.preservePath
