@@ -288,3 +288,19 @@ Content-Type: application/json
 /* expected */
 []
 /**/
+
+## unicode filenames
+-----------------------------paZqsnEHRufoShdX6fh0lUhXBP4k
+Content-Disposition: form-data; name="upload_file_0"; filename="🦕.dat"
+Content-Type: application/octet-stream
+
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+-----------------------------paZqsnEHRufoShdX6fh0lUhXBP4k--
+
+/* boundary */
+---------------------------paZqsnEHRufoShdX6fh0lUhXBP4k
+/**/
+
+/* expected */
+[ ['file', 'upload_file_0', 26, 0, '🦕.dat', '7bit', 'application/octet-stream'] ]
+/**/

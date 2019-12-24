@@ -68,6 +68,8 @@ export function parseParams(str) {
               charset)
           }
           charset = ''
+        } else if (tmp.length) {
+          tmp = decodeText(tmp, 'binary', 'utf8')
         }
         if (res[p] === undefined)
           res[p] = tmp
@@ -85,6 +87,8 @@ export function parseParams(str) {
     tmp = decodeText(tmp.replace(RE_ENCODED, encodedReplacer),
       'binary',
       charset)
+  } else if (tmp) {
+    tmp = decodeText(tmp, 'binary', 'utf8')
   }
 
   if (res[p] === undefined) {
