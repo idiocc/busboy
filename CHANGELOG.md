@@ -1,5 +1,9 @@
 ## 24 December 2019
 
+### [1.2.2](https://github.com/idiocc/busboy/compare/v1.2.1...v1.2.2)
+
+- [fix] Fix `utf8` filenames.
+
 ### [1.2.1](https://github.com/idiocc/busboy/compare/v1.2.0...v1.2.1)
 
 - [fix] Add `compile` dir to files.
