@@ -195,7 +195,9 @@ Done parsing form!
 
 ## Copyright
 
-Original Work by [Brian White aka mscdex](https://github.com/mscdex/busboy).
+GNU Affero General Public License v3.0
+
+[Original Work](https://github.com/mscdex/busboy) by Brian White aka mscdex under MIT License found in [COPYING](COPYING).
 
 ---
 

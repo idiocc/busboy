@@ -1,3 +1,10 @@
+## 24 December 2019
+
+### [1.2.0](https://github.com/idiocc/busboy/compare/v1.1.1...v1.2.0)
+
+- [package] Update structure.
+- [license] Switch to Affero.
+
 ## 4 July 2019
 
 ### [1.1.1](https://github.com/idiocc/busboy/compare/v1.1.0...v1.1.1)
