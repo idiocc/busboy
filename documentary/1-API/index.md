@@ -57,13 +57,11 @@ busboy.on('field',
 
 %~ width="25"%
 
-```## constructor => Busboy
-[
-  ["config", "BusBoyConfig"]
-]
-```
+<method name="BusBoy.constructor">types/index.xml</method>
 
-%TYPEDEF types/index.xml%
+<typedef name="BusBoyConfig">types/index.xml</typedef>
+
+<typedef name="BusBoyLimits">types/index.xml</typedef>
 
 The constructor can throw errors:
 

@@ -20,6 +20,12 @@ _goa.BusBoyParserConfig.prototype.parsedConType
 
 /* typal types/index.xml externs */
 /**
+ * Handles incoming streams to extract form-data.
+ * @param {!_goa.BusBoyConfig=} [conf] The configuration.
+ * @interface
+ */
+_goa.BusBoy = function(conf) {}
+/**
  * Options for the program.
  * @record
  */

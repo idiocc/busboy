@@ -1,6 +1,6 @@
 # @goa/busboy
 
-[![npm version](https://badge.fury.io/js/%40goa%2Fbusboy.svg)](https://npmjs.org/package/@goa/busboy)
+[![npm version](https://badge.fury.io/js/%40goa%2Fbusboy.svg)](https://www.npmjs.com/package/@goa/busboy)
 
 `@goa/busboy` is a fork of [A Streaming Parser For HTML Form Data For Node.JS](https://github.com/mscdex/busboy) Written In ES6 And Optimised With [JavaScript Compiler](https://compiler.page).
 
@@ -15,12 +15,14 @@ yarn add @goa/busboy
 - [`class Busboy`](#class-busboy)
   * [File Event](#file-event)
   * [Field Event](#field-event)
-- [`constructor(config: BusBoyConfig): Busboy`](#constructorconfig-busboyconfig-busboy)
-  * [`_goa.BusBoyConfig`](#type-_goabusboyconfig)
-  * [`_goa.BusBoyLimits`](#type-_goabusboylimits)
+- [`constructor(conf=: !BusBoyConfig)`](#constructorconf-busboyconfig-busboy)
+  * [`BusBoyConfig`](#type-busboyconfig)
+  * [`BusBoyLimits`](#type-busboylimits)
 - [Copyright](#copyright)
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/0.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/0.svg?sanitize=true">
+</a></p>
 
 ## API
 
@@ -30,7 +32,9 @@ The package is available by importing its default function:
 import Busboy from '@goa/busboy'
 ```
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/1.svg?sanitize=true">
+</a></p>
 
 ## `class Busboy`
 
@@ -44,7 +48,9 @@ Busboy is a _Writable_ stream. Emits the following events:
 | filesLimit            | Emitted when specified `files` limit has been reached. No more 'file' events will be emitted.                                                                         |
 | fieldsLimit           | Emitted when specified `fields` limit has been reached. No more 'field' events will be emitted.                                                                        |
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/2.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/2.svg?sanitize=true" width="25">
+</a></p>
 
 ### File Event
 
@@ -61,7 +67,9 @@ busboy.on('file',
 - Note: if you listen for this event, you should always handle the stream no matter if you care about the file contents or not (e.g. you can simply just do `stream.resume()`; if you want to discard the contents), otherwise the 'finish' event will never fire on the Busboy instance. However, if you don't care about **any** incoming files, you can simply not listen for the 'file' event at all and any/all files will be automatically and safely discarded (these discarded files do still count towards `files` and `parts` limits).
 - If a configured file size limit was reached, `stream` will both have a boolean property `truncated` (best checked at the end of the stream) and emit a 'limit' event to notify you when this happens.
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/3.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/3.svg?sanitize=true" width="25">
+</a></p>
 
 ### Field Event
 
@@ -76,22 +84,28 @@ busboy.on('field',
 )
 ```
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/4.svg?sanitize=true" width="25"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/4.svg?sanitize=true" width="25">
+</a></p>
 
-## `constructor(`<br/>&nbsp;&nbsp;`config: BusBoyConfig,`<br/>`): Busboy`
+## <code><ins>constructor</ins>(</code><sub><br/>&nbsp;&nbsp;`conf=: !BusBoyConfig,`<br/></sub><code>): <i>BusBoy</i></code>
 
-__<a name="type-_goabusboyconfig">`_goa.BusBoyConfig`</a>__: Options for the program.
+ - <kbd>conf</kbd> <em><code><a href="#type-busboyconfig" title="Options for the program.">!BusBoyConfig</a></code></em> (optional): The configuration.
 
-|     Name      |                                                   Type                                                   |                                        Description                                        | Default |
-| ------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
-| headers       | <em>!Object</em>                                                                                         | These are the HTTP headers of the incoming request, which are used by individual parsers. | -       |
-| highWaterMark | <em>number</em>                                                                                          | The `highWaterMark` to use for this Busboy instance (Default: WritableStream default).    | -       |
-| fileHwm       | <em>number</em>                                                                                          | The `highWaterMark` to use for file streams (Default: ReadableStream default).            | -       |
-| defCharset    | <em>string</em>                                                                                          | The default character set to use when one isn't defined.                                  | `utf8`  |
-| preservePath  | <em>boolean</em>                                                                                         | If paths in the multipart 'filename' field shall be preserved.                            | `false` |
-| limits        | <em><a href="#type-_goabusboylimits" title="Various limits on incoming data.">_goa.BusBoyLimits</a></em> | Various limits on incoming data.                                                          | -       |
+__<a name="type-busboyconfig">`BusBoyConfig`</a>__: Options for the program.
 
-__<a name="type-_goabusboylimits">`_goa.BusBoyLimits`</a>__: Various limits on incoming data.
+
+|     Name      |                                              Type                                               |                                        Description                                        | Default |
+| ------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------- |
+| headers       | <em>!Object</em>                                                                                | These are the HTTP headers of the incoming request, which are used by individual parsers. | -       |
+| highWaterMark | <em>number</em>                                                                                 | The `highWaterMark` to use for this Busboy instance (Default: WritableStream default).    | -       |
+| fileHwm       | <em>number</em>                                                                                 | The `highWaterMark` to use for file streams (Default: ReadableStream default).            | -       |
+| defCharset    | <em>string</em>                                                                                 | The default character set to use when one isn't defined.                                  | `utf8`  |
+| preservePath  | <em>boolean</em>                                                                                | If paths in the multipart 'filename' field shall be preserved.                            | `false` |
+| limits        | <em><a href="#type-busboylimits" title="Various limits on incoming data.">BusBoyLimits</a></em> | Various limits on incoming data.                                                          | -       |
+
+__<a name="type-busboylimits">`BusBoyLimits`</a>__: Various limits on incoming data.
+
 
 |     Name      |      Type       |                                 Description                                  |  Default   |
 | ------------- | --------------- | ---------------------------------------------------------------------------- | ---------- |
@@ -168,18 +182,16 @@ import Busboy from '@goa/busboy'
 ```
 ```
 http://localhost:5000
-Field [textfield]: value: 'test'
-File [filefield]: filename: nodejs.png, encoding: 7bit, mimetype: image/png
-File [filefield] got 64660 bytes
-File [filefield] got 65536 bytes
-File [filefield] got 65536 bytes
-File [filefield] got 65536 bytes
-File [filefield] got 26760 bytes
+Field [textfield]: value: ''
+File [filefield]: filename: hi, encoding: 7bit, mimetype: application/octet-stream
+File [filefield] got 12 bytes
 File [filefield] Finished
 Done parsing form!
 ```
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/5.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/5.svg?sanitize=true">
+</a></p>
 
 ## Copyright
 
@@ -191,7 +203,8 @@ Original Work by [Brian White aka mscdex](https://github.com/mscdex/busboy).
   <tr>
     <th>
       <a href="https://artd.eco">
-        <img src="https://raw.githubusercontent.com/wrote/wrote/master/images/artdeco.png" alt="Art Deco">
+        <img width="100" src="https://raw.githubusercontent.com/wrote/wrote/master/images/artdeco.png"
+          alt="Art Deco">
       </a>
     </th>
     <th>© <a href="https://artd.eco">Art Deco</a> for <a href="https://idio.cc">Idio</a> 2019</th>
@@ -202,7 +215,7 @@ Original Work by [Brian White aka mscdex](https://github.com/mscdex/busboy).
     </th>
     <th>
       <a href="https://www.technation.sucks" title="Tech Nation Visa">
-        <img src="https://raw.githubusercontent.com/artdecoweb/www.technation.sucks/master/anim.gif"
+        <img width="100" src="https://raw.githubusercontent.com/idiocc/cookies/master/wiki/arch4.jpg"
           alt="Tech Nation Visa">
       </a>
     </th>
@@ -210,4 +223,6 @@ Original Work by [Brian White aka mscdex](https://github.com/mscdex/busboy).
   </tr>
 </table>
 
-<p align="center"><a href="#table-of-contents"><img src="/.documentary/section-breaks/-1.svg?sanitize=true"></a></p>
+<p align="center"><a href="#table-of-contents">
+  <img src="/.documentary/section-breaks/-1.svg?sanitize=true">
+</a></p>

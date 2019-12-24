@@ -17,6 +17,8 @@ module.exports = BusBoy
 
 /* typal types/index.xml namespace */
 /**
+ * @typedef {_goa.BusBoy} BusBoy `＠interface` Handles incoming streams to extract form-data.
+ * @typedef {Object} _goa.BusBoy `＠interface` Handles incoming streams to extract form-data.
  * @typedef {_goa.BusBoyConfig} BusBoyConfig `＠record` Options for the program.
  * @typedef {Object} _goa.BusBoyConfig `＠record` Options for the program.
  * @prop {!Object} [headers] These are the HTTP headers of the incoming request, which are used by individual parsers.

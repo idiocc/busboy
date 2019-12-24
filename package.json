@@ -12,7 +12,7 @@
     "lib": "depack src/depack -o compile/busboy.js -a -c -p --hide_warnings_for src/encoding",
     "test-compile": "ALAMODE_ENV=test-compile yarn test",
     "lint": "eslint .",
-    "doc": "doc -o README.md -d -a",
+    "doc": "doc -o README.md -d -a -n _goa",
     "d": "yarn-s template d1 externs",
     "d1": "typal compile/index.js -u -t types",
     "template": "typal compile/template.js -T compile/index.js -t types",
@@ -30,6 +30,7 @@
     "type": "git",
     "url": "git://github.com/idiocc/busboy.git"
   },
+  "typedefs": "typedefs.json",
   "keywords": [
     "busboy",
     "http",

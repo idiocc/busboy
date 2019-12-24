@@ -2,6 +2,9 @@ import Multipart from './types/multipart'
 import Urlencoded from './types/urlencoded'
 import _BusBoy from './BusBoy'
 
+/**
+ * @implements {_goa.BusBoy}
+ */
 export default class BusBoy extends _BusBoy {
   /**
    * @param {_goa.BusBoyConfig} opts
@@ -16,5 +19,5 @@ export default class BusBoy extends _BusBoy {
 
 /**
  * @suppress {nonStandardJsDocs}
- * @typedef {import('../types').BusBoyConfig} _goa.BusBoyConfig
+ * @typedef {import('..').BusBoyConfig} _goa.BusBoyConfig
  */

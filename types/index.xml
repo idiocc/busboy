@@ -1,4 +1,9 @@
 <types namespace="_goa">
+  <interface name="BusBoy" desc="Handles incoming streams to extract form-data.">
+    <fn name="constructor">
+      <arg type="!_goa.BusBoyConfig" name="conf" opt>The configuration.</arg>
+    </fn>
+  </interface>
   <record name="BusBoyConfig" desc="Options for the program.">
     <prop opt type="!Object" name="headers">
       These are the HTTP headers of the incoming request, which are used by individual parsers.

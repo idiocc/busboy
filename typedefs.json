@@ -1,0 +1,18 @@
+{
+  "_goa.BusBoyConfig": {
+    "link": "https://github.com/idiocc/busboy#type-busboyconfig",
+    "description": "Options for the program."
+  },
+  "_goa.BusBoyLimits": {
+    "link": "https://github.com/idiocc/busboy#type-busboylimits",
+    "description": "Various limits on incoming data."
+  },
+  "_goa.BusBoy": {
+    "link": "https://github.com/idiocc/busboy#type-busboy",
+    "description": "Handles incoming streams to extract form-data."
+  },
+  "undefinedconstructor": {
+    "link": "https://github.com/idiocc/busboy#constructorconf-busboyconfig-busboy",
+    "description": ""
+  }
+}
